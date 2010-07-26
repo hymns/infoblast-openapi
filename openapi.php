@@ -1,15 +1,29 @@
 <?php
 /**
+ * phpHyppo
+ *
+ * An open source MVC application framework for PHP 5.1+
+ *
+ * @package		phpHyppo
+ * @author			Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
+ * @copyright		Copyright (c) 2008 - 2010, Green Apple Software.
+ * @license			LGPL, see included license file
+ * @link				http://www.phphyppo.com
+ * @since			Version 9.10
+ */
+
+/* no direct access */
+if (!defined('BASEDIR'))
+	exit;
+
+/**
  * openapi.php
  *
  * Library for infoblast open api (application programming interface) sms gateway
  *
- * @package		openapi
- * @author			Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
- * @copyright		Copyright (c) 2008 - 2010, Green Apple Software.
- * @license			LGPL, see included license file
- * @link				http://github.com/hymns/infoblast-openapi
- * @since			Version 10.07 RC23
+ * @package		phpHyppo
+ * @subpackage	Application Library
+ * @author			Muhammad Hamizi Jaminan
  */
 
 /**
@@ -21,17 +35,14 @@
  $config['username'] = 'infoblast_api_username';
  $config['password'] = 'infoblast_api_password';
 
- // include openapi library
- include openapi.php
-
- // call openapi class
- $openapi = new openapi();
- $openapi->initialize($config);
+ // load from controller
+ $this->load->library('openapi');
+ $this->openapi->initialize($config);
 
  // get sms list - parameters 1 & 2 is optional. [default]
  // parameter 1 sms status to read : [new] / old / all
  // parameter 2 is for delete sms after fetch :  true / [false]
- $text_messages = $openapi->get_sms('new', false);
+ $text_messages = $this->openapi->get_sms('new', false);
 
  // print sms array
  print_r($text_messages);
@@ -44,12 +55,9 @@
  $config['username'] = 'infoblast_api_username';
  $config['password'] = 'infoblast_api_password';
 
- // include openapi library
- include openapi.php
-
- // call openapi class
- $openapi = new openapi();
- $openapi->initialize($config);
+ // load from controller
+ $this->load->library('openapi');
+ $this->openapi->initialize($config);
 
  // prepair data
  $data['msgtype']   = 'text';
@@ -57,7 +65,7 @@
  $data['message']   = 'this is short messaging service demo from phphyppo openapi application library';
 
  // send sms to open api
- $response = $openapi->send_sms($data);
+ $response = $this->openapi->send_sms($data);
 
  // print response
  print_r($response);
@@ -70,18 +78,15 @@
  $config['username'] = 'infoblast_api_username';
  $config['password'] = 'infoblast_api_password';
 
- // include openapi library
- include openapi.php
-
- // call openapi class
- $openapi = new openapi();
- $openapi->initialize($config);
+ // load from controller
+ $this->load->library('openapi');
+ $this->openapi->initialize($config);
 
  // prepair data
  $data['msgid']  = '12345678901234567890';
  
  // get send status to open api
- $status = $openapi->send_status($data);
+ $status = $this->openapi->send_status($data);
 
  // print response
  print_r($status);
@@ -458,5 +463,5 @@ class OpenAPI
 }
 
 /* End of openapi.php */
-/* Location:  openapi.php */
+/* Location:  core/libraries/openapi.php */
 ?>
