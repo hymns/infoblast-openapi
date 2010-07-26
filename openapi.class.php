@@ -5,11 +5,11 @@
  * Library for infoblast open api (application programming interface) sms gateway
  *
  * @package		openapi
- * @author			Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
+ * @author		Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
  * @copyright		Copyright (c) 2008 - 2010, Green Apple Software.
- * @license			LGPL, see included license file
- * @link				http://github.com/hymns/infoblast-openapi
- * @since			Version 10.07 RC23
+ * @license		LGPL, see included license file
+ * @link		http://github.com/hymns/infoblast-openapi
+ * @since		Version 10.07 RC23
  */
 
 /**
