@@ -5,11 +5,11 @@
  * An open source MVC application framework for PHP 5.1+
  *
  * @package		phpHyppo
- * @author			Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
+ * @author		Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
  * @copyright		Copyright (c) 2008 - 2010, Green Apple Software.
- * @license			LGPL, see included license file
- * @link				http://www.phphyppo.com
- * @since			Version 9.10
+ * @license		LGPL, see included license file
+ * @link		http://www.phphyppo.com
+ * @since		Version 9.10
  */
 
 /* no direct access */
@@ -22,8 +22,8 @@ if (!defined('BASEDIR'))
  * Library for infoblast open api (application programming interface) sms gateway
  *
  * @package		phpHyppo
- * @subpackage	Application Library
- * @author			Muhammad Hamizi Jaminan
+ * @subpackage		Application Library
+ * @author		Muhammad Hamizi Jaminan
  */
 
 /**
