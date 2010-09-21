@@ -22,8 +22,8 @@ if (!defined('BASEDIR'))
  * Library for infoblast open api (application programming interface) sms gateway
  *
  * @package		phpHyppo
- * @subpackage		Application Library
- * @author		Muhammad Hamizi Jaminan
+ * @subpackage	Application Library
+ * @author			Muhammad Hamizi Jaminan
  */
 
 /**
@@ -205,7 +205,24 @@ class OpenAPI
 
 				// fetch sms detail from openapi server
 				$content = $this->_fetch_process($this->openapi_url_view, $data);
+				
+				// utf encoding & special character
+				$content = html_entity_decode($content, ENT_QUOTES, 'UTF-8');
+				
+				// clear old data *if exists*
+				unset($match, $xml_new, $xml_ori, $message);
+				
+				preg_match("|<message>(.+)</message>|si", $content, $match); 
+				$xml_new = $match[1];
+				$xml_ori = $match[1];
 
+				// filter up data
+				$xml_new = str_replace('&', '__amp__', $xml_new);
+				$xml_new = str_replace('<', '__lessthan__', $xml_new);
+				
+				//clean back
+				$content = str_replace($xml_ori, $xml_new, $content);
+				
 				// convert xml  data to array object
 				$object = @simplexml_load_string($content);
 
@@ -219,7 +236,12 @@ class OpenAPI
 					$record[$num]['to'] = (string) $object->msginfo->to;
 					$record[$num]['subject'] = (string) $object->msginfo->subject;
 					$record[$num]['msgtype'] = (string) $object->msginfo->msgtype;
-					$record[$num]['message'] = (string) $object->msginfo->message;
+					$message = (string) $object->msginfo->message;
+
+					$message = str_replace('__amp__', '&', $message);
+					$message = str_replace('__lessthan__', '<', $message);
+					
+					$record[$num]['message'] = $message;
 
 					// delete after fetch?
 					if ($delete === true)
