@@ -206,25 +206,10 @@ class OpenAPI
 				// fetch sms detail from openapi server
 				$content = $this->_fetch_process($this->openapi_url_view, $data);
 				
-				// utf encoding & special character
-				$content = html_entity_decode($content, ENT_QUOTES, 'UTF-8');
-				
-				// clear old data *if exists*
-				unset($match, $xml_new, $xml_ori, $message);
-				
-				preg_match("|<message>(.+)</message>|si", $content, $match); 
-				$xml_new = $match[1];
-				$xml_ori = $match[1];
-
-				// filter up data
-				$xml_new = str_replace('&', '__amp__', $xml_new);
-				$xml_new = str_replace('<', '__lessthan__', $xml_new);
-				
-				//clean back
-				$content = str_replace($xml_ori, $xml_new, $content);
-				
-				// convert xml  data to array object
-				$object = @simplexml_load_string($content);
+				// update using dom
+				$dom = new DomDocument('1.0', 'utf-8');
+				$dom->loadXML($content);
+				$object = simplexml_import_dom($dom->documentElement);
 
 				// make sure no broken xml data
 				if (is_object($object))
@@ -236,12 +221,7 @@ class OpenAPI
 					$record[$num]['to'] = (string) $object->msginfo->to;
 					$record[$num]['subject'] = (string) $object->msginfo->subject;
 					$record[$num]['msgtype'] = (string) $object->msginfo->msgtype;
-					$message = (string) $object->msginfo->message;
-
-					$message = str_replace('__amp__', '&', $message);
-					$message = str_replace('__lessthan__', '<', $message);
-					
-					$record[$num]['message'] = $message;
+					$record[$num]['message'] = (string) $object->msginfo->message;
 
 					// delete after fetch?
 					if ($delete === true)
