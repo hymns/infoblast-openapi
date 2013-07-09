@@ -113,6 +113,15 @@ class OpenAPI
 	private $password;
 
 	/**
+	 * $auto_logout
+	 *
+	 * vars for openapi password
+	 *
+	 * @access private
+	 */
+	private $auto_logout = false;
+
+	/**
 	 * $login_session
 	 *
 	 * vars for current session id
@@ -231,9 +240,12 @@ class OpenAPI
 		}
 
 		// logging out after fetching
-		unset($data['uid']);
-		$this->_fetch_process($this->openapi_url_logout, $data);
-
+		if ($this->auto_logout == true)
+		{
+			unset($data['uid']);
+			$this->_fetch_process($this->openapi_url_logout, $data);
+		}
+		
 		// return record set
 		return $record;
 	}
@@ -261,7 +273,8 @@ class OpenAPI
 		$content = $this->_fetch_process($this->openapi_url_send, $data);
 
 		// logging out after fetching
-		$this->_fetch_process($this->openapi_url_logout, $tmp);
+		if ($this->auto_logout == true)
+			$this->_fetch_process($this->openapi_url_logout, $tmp);
 
 		// return sending status
 		return $this->_status($content);
@@ -292,7 +305,8 @@ class OpenAPI
 		$content = $this->_fetch_process($this->openapi_url_status, $data);
 
 		// logging out after fetching
-		$this->_fetch_process($this->openapi_url_logout, $tmp);
+		if ($this->auto_logout == true)
+			$this->_fetch_process($this->openapi_url_logout, $tmp);
 		
 		// convert xml to array
 		$object =  @simplexml_load_string($content);
@@ -466,4 +480,3 @@ class OpenAPI
 
 /* End of openapi.php */
 /* Location:  core/libraries/openapi.php */
-?>
