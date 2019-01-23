@@ -1,95 +1,15 @@
 <?php
 /**
- * phpHyppo
- *
- * An open source MVC application framework for PHP 5.1+
- *
- * @package		phpHyppo
- * @author		Muhammad Hamizi Jaminan, hymns [at] time [dot] net [dot] my
- * @copyright		Copyright (c) 2008 - 2010, Green Apple Software.
- * @license		LGPL, see included license file
- * @link		http://www.phphyppo.com
- * @since		Version 9.10
- */
-
-/* no direct access */
-if (!defined('BASEDIR'))
-	exit;
-
-/**
  * openapi.php
  *
- * Library for infoblast open api (application programming interface) sms gateway
+ * Library for TM Infoblast OpenAPI SMS Gateway
  *
- * @package		phpHyppo
- * @subpackage	Application Library
- * @author			Muhammad Hamizi Jaminan
- */
-
-/**
- //----------------------------------------
- // Example usage #1
- //----------------------------------------
-
- // openapi auth configuration
- $config['username'] = 'infoblast_api_username';
- $config['password'] = 'infoblast_api_password';
-
- // load from controller
- $this->load->library('openapi');
- $this->openapi->initialize($config);
-
- // get sms list - parameters 1 & 2 is optional. [default]
- // parameter 1 sms status to read : [new] / old / all
- // parameter 2 is for delete sms after fetch :  true / [false]
- $text_messages = $this->openapi->get_sms('new', false);
-
- // print sms array
- print_r($text_messages);
-
- //----------------------------------------
- // Example usage #2
- //----------------------------------------
-
- // openapi auth configuration
- $config['username'] = 'infoblast_api_username';
- $config['password'] = 'infoblast_api_password';
-
- // load from controller
- $this->load->library('openapi');
- $this->openapi->initialize($config);
-
- // prepair data
- $data['msgtype']   = 'text';
- $data['to']        = '0123456789'; //separate by comma for multiple reciepient with same text message
- $data['message']   = 'this is short messaging service demo from phphyppo openapi application library';
-
- // send sms to open api
- $response = $this->openapi->send_sms($data);
-
- // print response
- print_r($response);
-
- //----------------------------------------
- // Example usage #3
- //----------------------------------------
-
- // openapi auth configuration
- $config['username'] = 'infoblast_api_username';
- $config['password'] = 'infoblast_api_password';
-
- // load from controller
- $this->load->library('openapi');
- $this->openapi->initialize($config);
-
- // prepair data
- $data['msgid']  = '12345678901234567890';
- 
- // get send status to open api
- $status = $this->openapi->send_status($data);
-
- // print response
- print_r($status);
+ * @package		infoblast-openapi
+ * @author		Muhammad Hamizi Jaminan, hello [at] hamizi [dot] net
+ * @copyright	Copyright (c) 2008 - 2018, Muhammad Hamizi Jaminan.
+ * @license		MIT, see included license file
+ * @link		https://github.com/hymns/infoblast-openapi
+ * @since		Version 1.0.10
  */
 
 class OpenAPI
@@ -214,7 +134,7 @@ class OpenAPI
 
 				// fetch sms detail from openapi server
 				$content = $this->_fetch_process($this->openapi_url_view, $data);
-				
+
 				// update using dom
 				$dom = new DomDocument('1.0', 'utf-8');
 				$dom->loadXML($content);
@@ -305,8 +225,7 @@ class OpenAPI
 		$content = $this->_fetch_process($this->openapi_url_status, $data);
 
 		// logging out after fetching
-		if ($this->auto_logout == true)
-			$this->_fetch_process($this->openapi_url_logout, $tmp);
+		$this->_fetch_process($this->openapi_url_logout, $tmp);
 		
 		// convert xml to array
 		$object =  @simplexml_load_string($content);
@@ -479,4 +398,4 @@ class OpenAPI
 }
 
 /* End of openapi.php */
-/* Location:  core/libraries/openapi.php */
+/* Location:  openapi.php */
