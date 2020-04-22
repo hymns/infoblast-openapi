@@ -6,10 +6,10 @@
  *
  * @package		infoblast-openapi
  * @author		Muhammad Hamizi Jaminan, hello [at] hamizi [dot] net
- * @copyright	Copyright (c) 2008 - 2018, Muhammad Hamizi Jaminan.
+ * @copyright	Copyright (c) 2008 - 2020, Muhammad Hamizi Jaminan.
  * @license		MIT, see included license file
  * @link		https://github.com/hymns/infoblast-openapi
- * @since		Version 1.0.10
+ * @since		Version 1.0.11
  */
 
 class OpenAPI
@@ -63,7 +63,7 @@ class OpenAPI
 	private $openapi_url_view 	= 'http://www.infoblast.com.my/openapi/getmsgdetail.php';
 	private $openapi_url_delete	= 'http://www.infoblast.com.my/openapi/delmsg.php';
 	private $openapi_url_send 	= 'http://www.infoblast.com.my/openapi/sendmsg.php';
-	private $openapi_url_status 	= 'http://www.infoblast.com.my/openapi/getsendstatus.php';
+	private $openapi_url_status = 'http://www.infoblast.com.my/openapi/getsendstatus.php';
 
  	/**
 	 * class constructor
@@ -116,6 +116,7 @@ class OpenAPI
 
 		// fetch sms list from openapi server
 		$content = $this->_fetch_process($this->openapi_url_spool, $data);
+		$record = [];
 
 		// reset status vars
 		unset($data['status']);
@@ -124,7 +125,7 @@ class OpenAPI
 		$sms_list = $this->_build_list($content);
 
 		// count sms listing
-		if (sizeof($sms_list) > 0)
+		if (count($sms_list) > 0)
 		{
 			// fetch from sms list one by one - arghhh
 			foreach($sms_list as $num)
@@ -133,7 +134,9 @@ class OpenAPI
 				$data['uid'] = $num;
 
 				// fetch sms detail from openapi server
-				$content = $this->_fetch_process($this->openapi_url_view, $data);
+				$content = $this->_fetch_process($this->openapi_url_view, $data);				
+				if (! $content)
+					break;
 
 				// update using dom
 				$dom = new DomDocument('1.0', 'utf-8');
@@ -199,7 +202,6 @@ class OpenAPI
 		// return sending status
 		return $this->_status($content);
 	}
-
 
 	/**
 	 * send_status
