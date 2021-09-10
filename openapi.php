@@ -50,7 +50,16 @@ class OpenAPI
 	 */
 	private $login_session = null;
 
-	/**
+    /**
+     * $error
+     *
+     * vars for error string
+     *
+     * @access public
+     */
+    public $error = [];
+
+    /**
 	 * $openapi_url_*
 	 *
 	 * variable for open api url path
@@ -108,7 +117,7 @@ class OpenAPI
 	{
 		// no session - halt
 		if ($this->login_session === null)
-			return null;
+			return $this->error;
 
 		// openapi session & sms data
 		$data['sessionid'] = $this->login_session;
@@ -186,7 +195,7 @@ class OpenAPI
 	{
 		// no session - halt
 		if ($this->login_session === null)
-			return null;
+			return $this->error;
 
 		// merge session id with text message data
 		$tmp = array('sessionid' => $this->login_session);
@@ -217,7 +226,7 @@ class OpenAPI
 	{
 		// no session - halt
 		if ($this->login_session === null)
-			return null;
+			return $this->error;
 
 		// merge session id with text message data
 		$tmp = array('sessionid' => $this->login_session);
@@ -274,6 +283,13 @@ class OpenAPI
 
 		// convert xml data to array object
 		$object = @simplexml_load_string($content);
+
+		if ($object->attributes()->status !== 'ok')
+        {
+            if (isset($object->err))
+                $this->error[] = ['status' => 'failed', 'message' => (string) $object->err->attributes()->desc];
+        }
+
 
 		// return auth data
 		return (is_object($object) && isset($object->sessionid)) ? (string) $object->sessionid : null;
